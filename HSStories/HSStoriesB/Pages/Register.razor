@@ -1,0 +1,109 @@
+﻿@page "/Register"
+@using Hsstories;
+@using Microsoft.AspNetCore.Components.Forms
+@inject HttpClient httpClient
+
+<link rel="stylesheet" href="css/Register.scss" />
+<PageTitle>Register</PageTitle>
+
+<div class="form-container">
+    <EditForm Model="@user" OnSubmit="@CreateUser">
+        <legend>Registro</legend>
+
+        <InputText id="name" @bind-Value=@user.Name placeholder="Escriba su Nombre"></InputText>
+        <ValidationMessage For="@(() => user.Name)" />
+
+        <InputText id="lastName" @bind-Value=@user.LastName placeholder="Escriba su Apellido"></InputText>
+        <ValidationMessage For="@(() => user.LastName)" />
+
+        <InputText id="userName" @bind-Value=@user.UserName placeholder="Escriba su Nombre de Usuario"></InputText>
+        <ValidationMessage For="@(() => user.UserName)" />
+
+        <InputDate @bind-Value="user.Birthday"></InputDate>
+        <ValidationMessage For="@(() => user.Birthday)" />
+
+        <InputText id="email" @bind-Value=@user.Email placeholder="Escriba su Email" type="email"></InputText>
+        <ValidationMessage For="@(() => user.Email)" />
+
+        <InputText id="password" @bind-Value=@user.Password placeholder="Escriba su Contraseña" type="password"></InputText>
+        <ValidationMessage For="@(() => user.Password)" />
+
+        <InputText id="phone" @bind-Value=@user.Phone placeholder="Escriba su Telefono" type="phone"></InputText>
+        <ValidationMessage For="@(() => user.Phone)" />
+
+        <InputText id="adress" @bind-Value=@user.Adress placeholder="Escriba su Direccion"></InputText>
+        <ValidationMessage For="@(() => user.Adress)" />
+
+        <InputFile OnChange="@HandleFile"></InputFile>
+        @if (isLoadingFile)
+        {
+            <p>Loading....</p>
+        }
+
+        <div class="button-container">
+            <input type="submit" value="Enviar" class="button" />
+
+        </div>
+        <DataAnnotationsValidator />
+        <ValidationSummary class="text-white" />
+    </EditForm>
+
+    <div>
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <h3>@message</h3>
+
+        }
+    </div>
+</div>
+
+
+
+
+@code {
+    private User user = new User();
+    private string message = string.Empty;
+    private IBrowserFile file;
+    private bool isLoadingFile;
+
+    private async Task HandleFile(InputFileChangeEventArgs e)
+    {
+        file = e.File;
+
+        if (file != null)
+        {
+            using var ms = new MemoryStream();
+            isLoadingFile = true;
+            await file.OpenReadStream().CopyToAsync(ms);
+            isLoadingFile = false;
+            var fileBytes = ms.ToArray();
+
+
+            user.ProfilePhoto = fileBytes;
+
+        }
+
+
+    }
+
+
+    private async Task CreateUser()
+    {
+
+        var response = await httpClient.PostAsJsonAsync<User>($"{httpClient.BaseAddress}api/CreateUser", user);
+
+        if (response.IsSuccessStatusCode)
+        {
+            message = "Usuario Creado Correctamente";
+        }
+        else
+        {
+            message = "Hubo un Error Al crear El Usuario , Porfavor Intentelo Nuevamente...";
+
+        }
+
+    }
+
+
+
+}
