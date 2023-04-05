@@ -1,8 +1,6 @@
 ﻿using HSStories.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Text;
 
 namespace HSStories.Controllers
 {
@@ -47,6 +45,7 @@ namespace HSStories.Controllers
             return Ok(user);
         }
 
+        //Controlador par ala creacion de  un usuario Nuevo
         [HttpPost("CreateUser")]
         public async Task<ActionResult> CreateUser(User user)
 
@@ -55,6 +54,7 @@ namespace HSStories.Controllers
             {
                 if (user.Password != null)
                 {
+                    //Implementamos nuestro metodo de Hash para la contraseña 
                     string hashedPassword = HashPasswords.HashPassword(user.Password);
                     user.Password = hashedPassword;
                 }
@@ -71,7 +71,6 @@ namespace HSStories.Controllers
             return Ok("Usuario Creado Correctamente");
 
         }
-
 
 
         [HttpPut("EditUser/{id}")]
@@ -104,7 +103,7 @@ namespace HSStories.Controllers
 
         }
 
-
+        //Metodo para Borrar un Usuario por su Id
         [HttpDelete("DeleteUser/{id}")]
 
         public async Task<IActionResult> DeleteUser(int id)

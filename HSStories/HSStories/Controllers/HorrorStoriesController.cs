@@ -46,7 +46,7 @@ namespace HSStories.Controllers
         }
 
         [HttpPost("CreateStory"), Authorize]
-        public async Task<IActionResult> CreateStoryAsync([FromForm] Horrorstory story, List<IFormFile> files)
+        public async Task<IActionResult> CreateStoryAsync(Horrorstory story, List<IFormFile> files)
         {
             try
             {

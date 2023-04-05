@@ -1,13 +1,7 @@
 using HSStories.Models;
-<<<<<<< HEAD
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-
-
-=======
-using Microsoft.EntityFrameworkCore;
-
->>>>>>> 49f822e3c6306d99d2563e4a320acc869e2bb83e
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

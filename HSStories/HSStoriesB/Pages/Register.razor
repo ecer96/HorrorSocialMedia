@@ -77,8 +77,6 @@
             await file.OpenReadStream().CopyToAsync(ms);
             isLoadingFile = false;
             var fileBytes = ms.ToArray();
-
-
             user.ProfilePhoto = fileBytes;
 
         }
