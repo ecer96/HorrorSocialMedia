@@ -26,11 +26,8 @@ public partial class HsstoriesContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-<<<<<<< HEAD
         => optionsBuilder.UseSqlServer("Server=DESKTOP-8T51CGN;Database=HSStories;Trusted_Connection=True;TrustServerCertificate=True;");
-=======
-        => optionsBuilder.UseSqlServer();
->>>>>>> 49f822e3c6306d99d2563e4a320acc869e2bb83e
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
