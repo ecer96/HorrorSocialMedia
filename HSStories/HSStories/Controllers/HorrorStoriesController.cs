@@ -1,8 +1,13 @@
 ﻿using HSStories.Models;
+<<<<<<< HEAD
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+=======
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+>>>>>>> 49f822e3c6306d99d2563e4a320acc869e2bb83e
 
 namespace HSStories.Controllers
 {
@@ -18,9 +23,15 @@ namespace HSStories.Controllers
         }
 
         [HttpGet("Stories")]
+<<<<<<< HEAD
         public async Task<ActionResult<List<Horrorstory>>> GetStories()
         {
             var stories = await _context.Horrorstories.ToListAsync();
+=======
+        public ActionResult GetStories()
+        {
+            var stories = _context.Horrorstories.ToList();
+>>>>>>> 49f822e3c6306d99d2563e4a320acc869e2bb83e
 
             if (stories == null || stories.Count == 0)
             {
@@ -31,9 +42,15 @@ namespace HSStories.Controllers
         }
 
         [HttpGet("Story/{id}")]
+<<<<<<< HEAD
         public async Task<ActionResult<Horrorstory>> GetStory(int id)
         {
             var story =await  _context.Horrorstories.FindAsync(id);
+=======
+        public ActionResult GetStory(int id)
+        {
+            var story = _context.Horrorstories.Find(id);
+>>>>>>> 49f822e3c6306d99d2563e4a320acc869e2bb83e
 
             if (story == null)
             {
@@ -43,6 +60,7 @@ namespace HSStories.Controllers
             return Ok(story);
         }
 
+<<<<<<< HEAD
         [HttpPost("CreateStory"),Authorize]
         public async Task<IActionResult> CreateStoryAsync([FromForm] Horrorstory story, List<IFormFile> files)
         {
@@ -79,15 +97,29 @@ namespace HSStories.Controllers
 
                 _context.Add(story);
                 await _context.SaveChangesAsync();
+=======
+        [HttpPost]
+        public ActionResult CreateStory(Horrorstory story)
+        {
+            try
+            {
+
+                _context.Add(story);
+>>>>>>> 49f822e3c6306d99d2563e4a320acc869e2bb83e
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
+<<<<<<< HEAD
+=======
+            _context.SaveChanges();
+>>>>>>> 49f822e3c6306d99d2563e4a320acc869e2bb83e
 
             return Ok("Story Created");
         }
 
+<<<<<<< HEAD
 
         [HttpPut("EditStory/{id}"),Authorize]
         public async Task <ActionResult<Horrorstory>> EditStory(int id, Horrorstory Updatedstory)
@@ -95,6 +127,14 @@ namespace HSStories.Controllers
             var story = await _context.Horrorstories.FindAsync(id);
 
             if (story == null)
+=======
+        [HttpPut("EditStory/{id}")]
+        public ActionResult EditStory(int id ,Horrorstory Updatedstory)
+        {
+            var story = _context.Horrorstories.Find(id);
+
+            if(story == null)
+>>>>>>> 49f822e3c6306d99d2563e4a320acc869e2bb83e
             {
                 return BadRequest("We Coulnd Find Any Story Whit That Id");
             }
@@ -105,6 +145,7 @@ namespace HSStories.Controllers
             story.Image2 = Updatedstory.Image2;
             story.Image3 = Updatedstory.Image3;
             story.Image4 = Updatedstory.Image4;
+<<<<<<< HEAD
 
             _context.SaveChanges();
 
@@ -119,6 +160,22 @@ namespace HSStories.Controllers
             var story = await _context.Horrorstories.FindAsync(id);
 
             if (story == null)
+=======
+            
+            _context.SaveChanges();
+            
+            return Ok("Changes Correctly Applied :" + story);
+            
+        }
+
+
+        [HttpDelete("DeleteStory")]
+        public ActionResult DeleteStory(int id)
+        {
+            var story = _context.Horrorstories.Find(id);
+
+            if(story == null)
+>>>>>>> 49f822e3c6306d99d2563e4a320acc869e2bb83e
             {
                 return BadRequest("That Story Doesnt Exist");
             }

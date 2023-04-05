@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+=======
+﻿using System;
+using System.Collections.Generic;
+>>>>>>> 49f822e3c6306d99d2563e4a320acc869e2bb83e
 
 namespace HSStories.Models;
 
@@ -7,6 +12,7 @@ public partial class User
 {
     public long Id { get; set; }
 
+<<<<<<< HEAD
     [Required(ErrorMessage = "Favor de  Ingresar Tu Nombre"), MinLength(3, ErrorMessage = "Nombre debe contener por lo menos 3 caracteres"), MaxLength(30, ErrorMessage = "Nombre solo Puede Contener 30 Caracteres como Maximo")]
     public string Name { get; set; } = null!;
     [Required(ErrorMessage = "Favor de  Ingresar Su Apellido"), MinLength(3, ErrorMessage = "Apelldio  debe contener por lo menos 3 caracteres"), MaxLength(30, ErrorMessage = "Apellido solo Puede Contener 30 Caracteres como Maximo")]
@@ -28,6 +34,24 @@ public partial class User
     [Phone]
     public string Phone { get; set; } = null!;
   
+=======
+    public string Name { get; set; } = null!;
+
+    public string LastName { get; set; } = null!;
+
+    public string UserName { get; set; } = null!;
+
+    public string Email { get; set; } = null!;
+
+    public string Password { get; set; } = null!;
+
+    public string? Salt { get; set; }
+
+    public DateTime? Birthday { get; set; }
+
+    public string Phone { get; set; } = null!;
+
+>>>>>>> 49f822e3c6306d99d2563e4a320acc869e2bb83e
     public string? Adress { get; set; }
 
     public DateTime? CreatedAt { get; set; }
