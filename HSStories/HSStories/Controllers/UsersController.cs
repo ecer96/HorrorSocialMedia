@@ -1,4 +1,5 @@
 ﻿using HSStories.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,6 +7,8 @@ namespace HSStories.Controllers
 {
     [ApiController]
     [Route("api")]
+
+  
     public class UsersController : ControllerBase
     {
         private readonly HsstoriesContext _context;
@@ -16,6 +19,7 @@ namespace HSStories.Controllers
         }
 
         [HttpGet("GetUsers")]
+        [Authorize]
         public async Task<ActionResult<List<User>>> GetUsers()
         {
             var users = await _context.Users.ToListAsync();
@@ -31,7 +35,8 @@ namespace HSStories.Controllers
         }
 
 
-        [HttpGet("GetUser/{username}")]
+        [HttpGet("GetUser/{id}")]
+        [Authorize]
         public async Task<ActionResult<User>> GetUser(int Id)
         {
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == Id);
@@ -39,7 +44,7 @@ namespace HSStories.Controllers
 
             if (user == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             return Ok(user);
@@ -74,6 +79,7 @@ namespace HSStories.Controllers
 
 
         [HttpPut("EditUser/{id}")]
+        [Authorize]
 
         public async Task<ActionResult> EditUser(int id, User updatedUser)
 
@@ -105,6 +111,7 @@ namespace HSStories.Controllers
 
         //Metodo para Borrar un Usuario por su Id
         [HttpDelete("DeleteUser/{id}")]
+        [Authorize]
 
         public async Task<IActionResult> DeleteUser(int id)
         {

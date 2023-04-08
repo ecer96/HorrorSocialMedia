@@ -73,10 +73,10 @@
 }
 
 .profile-photo {
-    width: 40px;
-    height: 40px;
-    border-radius: 32px;
-    object-fit:contain;
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    object-fit:cover;
 }
 
 .user-container {
@@ -86,13 +86,8 @@
     margin:10px 0 0 5px;
 }
 
-h4 {
-    color: white;
-    font-size:20px;
-    text-transform:capitalize;
-}
 
 h2{
     color:white;
-    margin:10px 0 0 15px;
+    font-size:30px;
 }

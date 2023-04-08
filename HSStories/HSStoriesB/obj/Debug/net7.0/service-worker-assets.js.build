@@ -73,7 +73,7 @@
       "url": "icon-512.png"
     },
     {
-      "hash": "sha256-CDZJbb0N2GHzkMV1iHxH5jL6i9oSp6e00MDr8tK9GlU=",
+      "hash": "sha256-dGvynUcajydonuszHXHU4z7926YP9C+Q9QwI\/tuKMKs=",
       "url": "index.html"
     },
     {
@@ -81,7 +81,7 @@
       "url": "Js\/Storage.js"
     },
     {
-      "hash": "sha256-\/y0ipd3PQ46UaNiGUE71NAksM8RHQ1Cqfsgn33btjEU=",
+      "hash": "sha256-17I6WnPoxGUGR5lW9Az3ETbsszqRj2f8sPh6xMxLK08=",
       "url": "manifest.json"
     },
     {
@@ -89,7 +89,7 @@
       "url": "sample-data\/weather.json"
     },
     {
-      "hash": "sha256-ib2xTxq89iqjUu2p3doLfAHWkN7+OhvZtCovk9QadAA=",
+      "hash": "sha256-YMtEwMiuu8NCnFzRf9CVIY\/tHTlPINmZUnSj7gwWwf0=",
       "url": "HSStoriesB.styles.css"
     },
     {
@@ -941,11 +941,11 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-9ya0chwFqm8pd+K4sdCNM0CWuJyD5B5G6vQwNTSwjds=",
+      "hash": "sha256-HvmsOKBby6\/bhu2zHXbbBS9KOf7\/VWGwCCpCtEIne4w=",
       "url": "_framework\/HSStoriesB.dll"
     },
     {
-      "hash": "sha256-klm0OWtmZAm2Uw0S1g84ZMtgq12TXjtfqdHJVhqgZiw=",
+      "hash": "sha256-+\/1FlmzWOVeoKirJ6K+H3R2yPHxEBSciKXKVrhX3s7M=",
       "url": "_framework\/HSStoriesB.pdb"
     },
     {
@@ -953,9 +953,9 @@
       "url": "_framework\/blazor.webassembly.js"
     },
     {
-      "hash": "sha256-pzBCVLU71MYS2NPao5aGHl+jRLKbpo\/FCXjZyp3AVA0=",
+      "hash": "sha256-ifdMp05CFUAK+42jb9UkuqV1mVyGBdK8TdEyftWQXSk=",
       "url": "_framework\/blazor.boot.json"
     }
   ],
-  "version": "Yz1z6BUA"
+  "version": "82zyJuCz"
 };

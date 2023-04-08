@@ -1,7 +1,9 @@
 using HSStories.Models;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -11,12 +13,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
-
-
+//Configuracion de Conexion a base de datos
 builder.Services.AddDbContext<HsstoriesContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
 
+//Cors Para permitir cualquier origen
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
@@ -26,6 +27,19 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options=>options.TokenValidationParameters = new()
+    {
+        ValidateIssuer=true,
+        ValidateAudience=true,
+        ValidateLifetime=true,
+        ValidateIssuerSigningKey=true,
+        ValidIssuer="HSStories",
+        ValidAudience="Clients",
+        IssuerSigningKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MySecret987654321")),
+    });
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -40,6 +54,8 @@ app.UseCors();
 
 app.UseHttpsRedirection();
 
+//Permitiendo Autenticacion y Autorizacion
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

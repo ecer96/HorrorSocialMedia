@@ -1,17 +1,38 @@
-﻿@using System.Security.Claims;
-@using System.IdentityModel.Tokens.Jwt;
+﻿@using HSStoriesB.Provider;
+@using Microsoft.AspNetCore.Components.Authorization;
+@using Hsstories
 @using System.Text.Json;
-@inject Microsoft.JSInterop.IJSRuntime jsRuntime
-@inject IJSRuntime JSRuntime
+@using System.Security.Claims;
+@using System.Net.Http.Headers;
+@using Newtonsoft.Json;
+@using static System.Net.WebRequestMethods;
+@inject AuthState authState
+@inject HttpClient httpClient
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 @inject NavigationManager navigationManager
-
-
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
+        @if (auth != null && auth.User != null && auth.User.Identity != null && auth.User.Identity.IsAuthenticated)
+        {
+            // código para mostrar información del usuario autenticado
+            <div class="user-container">
+                @if (profilePhoto != null)
+                {
+                    string image64 = Convert.ToBase64String(profilePhoto);
+                    string url = "data:img/*;base64," + image64;
+                    <img src="@url" alt="profile-photo" class="profile-photo">
 
-
-        <h2>HSStories</h2>
+                }
+                <h2>@userName</h2>
+            </div>
+        }
+        else
+        {
+            // código para mostrar HSStories para usuarios no autenticados
+            <h2>HSStories</h2>
+        }
 
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
@@ -21,26 +42,29 @@
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="flex-column">
+        <AuthorizeView>
+            <Authorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="Register" onclick="@HandleLogout">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Logout
+                    </NavLink>
+                </div>
+            </Authorized>
+            <NotAuthorized>
 
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="Register">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Register
+                    </NavLink>
+                </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link">
-
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Logout
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Login">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Login
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Register">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Register
-            </NavLink>
-        </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="Login">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Login
+                    </NavLink>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
 
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
@@ -63,12 +87,72 @@
 @code {
     private bool collapseNavMenu = true;
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private AuthenticationState? auth;
+    User user = new User();
+    private string? userName;
+    private byte[]? profilePhoto;
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+        auth = await authState.GetAuthenticationStateAsync();
+
+        userName = auth.User.Claims.FirstOrDefault(u => u.Type == "unique_name")?.Value;
+        if (auth != null && auth.User != null && auth.User.Identity != null && auth.User.Identity.IsAuthenticated)
+        {
+            await GetUserData();
+        }
+
+    }
+
+
+    private async Task GetUserData()
+    {
+        var token = await localStorage.GetItemAsync<string>("jwt");
+
+        @if (auth != null && auth.User != null && auth.User.Identity != null && auth.User.Identity.IsAuthenticated)
+        {
+
+            var userStringId = auth.User.Claims.FirstOrDefault(u => u.Type == "nameid")?.Value;
+
+            if (userStringId != null && !string.IsNullOrEmpty(userStringId))
+            {
+                var userIntId = Int32.Parse(userStringId);
+
+                httpClient.DefaultRequestHeaders.Authorization
+                         = new AuthenticationHeaderValue("Bearer", token);
+
+                var request = $"{httpClient.BaseAddress}api/GetUser/{userIntId}";
+
+                var response = await httpClient.GetAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseJson = await response.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(responseJson))
+                    {
+                        user = JsonConvert.DeserializeObject<User>(responseJson);
+
+                        if (user != null && user.ProfilePhoto != null)
+                        {
+                            profilePhoto = user.ProfilePhoto;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private async Task HandleLogout()
+    {
+        await localStorage.RemoveItemAsync("jwt");
+        navigationManager.NavigateTo("/", true);
+    }
 
 
 }

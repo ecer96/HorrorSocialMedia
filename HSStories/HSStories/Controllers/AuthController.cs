@@ -13,10 +13,12 @@ namespace HSStories.Controllers
     public class AuthController : ControllerBase
     {
         private readonly HsstoriesContext _context;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(HsstoriesContext context)
+        public AuthController(HsstoriesContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         [HttpPost("Login")]
@@ -58,24 +60,28 @@ namespace HSStories.Controllers
 
             };
             //Creamos nuestra secret key
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SecretToSecret987654321"));
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MySecret987654321"));
 
             //creamos nuestra firma del token
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
             var token = new JwtSecurityToken(
                 claims: claims,
                 expires: DateTime.Now.AddDays(1),
-                signingCredentials: credentials
+                signingCredentials: credentials,
+                issuer:"HSStories",
+                audience:"Clients"
 
                 );
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return jwt;
+            return  jwt;
         }
 
+       
     }
+
 }
 
 

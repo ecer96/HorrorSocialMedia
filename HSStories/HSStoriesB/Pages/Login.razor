@@ -1,9 +1,55 @@
 ﻿@page "/Login"
+@using Hsstories;
+@inject HttpClient httpClient
+@inject Blazored.LocalStorage.ILocalStorageService localStorage;
+@inject NavigationManager navigationManager
 
 
+<EditForm Model="@loginModel" OnValidSubmit="@HandleLogin">
+    <InputText @bind-Value="loginModel.Email" placeholder="Email"></InputText>
+    <InputText @bind-Value="loginModel.Password" placeholder="********" type="password"></InputText>
 
+    <div class="button-container">
+        <input type="submit" value="Iniciar Sesion" />
+    </div>
+</EditForm>
+<div>
+    <h3>@message</h3>
+</div>
 
 @code {
-   
+    private string message=string.Empty;
+
+    LoginModel loginModel = new LoginModel();
+
+    public async Task HandleLogin()
+    {
+        try
+        {
+            var response = await httpClient.PostAsJsonAsync($"{httpClient.BaseAddress}api/Auth/Login", loginModel);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var token = await response.Content.ReadAsStringAsync();
+                await localStorage.SetItemAsync("jwt", token);
+                navigationManager.NavigateTo("/",true);
+            }
+            else
+            {
+                message = "Hubo un Problema con sus Credenciales, Favor de Verificarlas";
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            message = "Hubo un error al conectarse con el servidor. Por favor, inténtelo de nuevo más tarde."+ ex;
+
+        }
+        catch (Exception ex)
+        {
+            message = "Hubo un error al iniciar sesión. Por favor, inténtelo de nuevo más tarde." + ex;
+
+        }
+    }
+
 
 }

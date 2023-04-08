@@ -9,6 +9,7 @@ namespace HSStories.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class HorrorStoriesController : ControllerBase
     {
         private readonly HsstoriesContext _context;
@@ -21,6 +22,7 @@ namespace HSStories.Controllers
         [HttpGet("Stories")]
         public async Task<ActionResult<List<Horrorstory>>> GetStories()
         {
+
             var stories = await _context.Horrorstories.ToListAsync();
 
             if (stories == null || stories.Count == 0)

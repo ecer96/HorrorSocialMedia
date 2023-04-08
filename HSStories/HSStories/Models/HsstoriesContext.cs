@@ -164,7 +164,6 @@ public partial class HsstoriesContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false);
             entity.Property(e => e.ProfilePhoto).HasColumnName("profilePhoto");
-            entity.Property(e => e.Salt).HasMaxLength(60);
             entity.Property(e => e.UserName)
                 .HasMaxLength(100)
                 .IsUnicode(false);
